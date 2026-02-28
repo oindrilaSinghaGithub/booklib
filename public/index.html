@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Book System</title>
+    <style>
+        body {
+            font-family: Arial;
+            margin: 40px;
+        }
+        .hidden {
+            display: none;
+        }
+        input, select {
+            margin: 5px;
+        }
+        button {
+            margin: 5px;
+        }
+        .box {
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ================= LOGIN PAGE ================= -->
+
+<div id="authSection" class="box">
+    <h2>Login</h2>
+    <input type="text" id="loginUsername" placeholder="Username">
+    <input type="password" id="loginPassword" placeholder="Password">
+    <button onclick="login()">Login</button>
+
+    <h3>Or Signup</h3>
+    <input type="text" id="signupUsername" placeholder="Username">
+    <input type="password" id="signupPassword" placeholder="Password">
+    <select id="signupRole">
+        <option value="User">User</option>
+        <option value="Admin">Admin</option>
+    </select>
+    <button onclick="signup()">Signup</button>
+</div>
+
+<!-- ================= DASHBOARD ================= -->
+
+<div id="dashboardSection" class="hidden">
+
+    <h2>Welcome <span id="welcomeUser"></span></h2>
+    <button onclick="logout()">Logout</button>
+
+    <!-- Admin Only -->
+    <div id="adminSection" class="box hidden">
+        <h3>Add Book (Admin Only)</h3>
+        <input type="text" id="title" placeholder="Title">
+        <input type="text" id="author" placeholder="Author">
+        <input type="text" id="genre" placeholder="Genre">
+        <input type="number" id="rating" placeholder="Rating">
+        <button onclick="addBook()">Add Book</button>
+    </div>
+
+    <!-- Search -->
+    <div class="box">
+        <h3>Search Books</h3>
+        <input type="text" id="searchGenre" placeholder="Genre">
+        <input type="number" id="searchRating" placeholder="Minimum Rating">
+        <button onclick="searchBooks()">Search</button>
+    </div>
+
+    <!-- Books List -->
+    <div class="box">
+        <h3>Books List</h3>
+        <ul id="bookList"></ul>
+    </div>
+
+</div>
+
+<script>
+
+let users = [];
+let books = [];
+let currentUser = null;
+
+// ================= SIGNUP =================
+function signup() {
+    let username = document.getElementById("signupUsername").value;
+    let password = document.getElementById("signupPassword").value;
+    let role = document.getElementById("signupRole").value;
+
+    users.push({ username, password, role });
+
+    alert("Signup successful! Please login.");
+}
+
+// ================= LOGIN =================
+function login() {
+    let username = document.getElementById("loginUsername").value;
+    let password = document.getElementById("loginPassword").value;
+
+    let user = users.find(u => u.username === username && u.password === password);
+
+    if (user) {
+        currentUser = user;
+
+        document.getElementById("authSection").classList.add("hidden");
+        document.getElementById("dashboardSection").classList.remove("hidden");
+
+        document.getElementById("welcomeUser").innerText = user.username;
+
+        if (user.role === "Admin") {
+            document.getElementById("adminSection").classList.remove("hidden");
+        }
+
+        displayBooks(books);
+    } else {
+        alert("Invalid login!");
+    }
+}
+
+// ================= LOGOUT =================
+function logout() {
+    currentUser = null;
+    document.getElementById("dashboardSection").classList.add("hidden");
+    document.getElementById("authSection").classList.remove("hidden");
+}
+
+// ================= ADD BOOK =================
+function addBook() {
+    let title = document.getElementById("title").value;
+    let author = document.getElementById("author").value;
+    let genre = document.getElementById("genre").value;
+    let rating = document.getElementById("rating").value;
+
+    books.push({ title, author, genre, rating });
+
+    displayBooks(books);
+}
+
+// ================= DISPLAY BOOKS =================
+function displayBooks(bookArray) {
+    let list = document.getElementById("bookList");
+    list.innerHTML = "";
+
+    bookArray.forEach(book => {
+        let li = document.createElement("li");
+        li.innerText = `${book.title} - ${book.author} | ${book.genre} | Rating: ${book.rating}`;
+        list.appendChild(li);
+    });
+}
+
+// ================= SEARCH =================
+function searchBooks() {
+    let genre = document.getElementById("searchGenre").value.toLowerCase();
+    let rating = document.getElementById("searchRating").value;
+
+    let filtered = books.filter(book => {
+        return (genre === "" || book.genre.toLowerCase().includes(genre)) &&
+               (rating === "" || book.rating >= rating);
+    });
+
+    displayBooks(filtered);
+}
+
+</script>
+
+</body>
+</html>
