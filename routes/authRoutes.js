@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user"); 
 
-const router = express.Router();
+const router = express.Router();//creates router object express.js
 
 
 // ===================== SIGNUP =====================
@@ -79,7 +79,7 @@ router.post("/login", async (req, res) => {
       { expiresIn: "1d" }
     );
 
-    res.status(200).json({
+    res.status(200).json({            //res (response object) that sends json files 
       message: "Login successful",
       token,
     });
