@@ -1,7 +1,7 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const User = require("../models/user"); // Make sure capital U if file is User.js
+const User = require("../models/user"); 
 
 const router = express.Router();
 
@@ -69,7 +69,7 @@ router.post("/login", async (req, res) => {
       });
     }
 
-    // 🔥 Generate JWT Token (WITH ROLE)
+    //Generate JWT Token (WITH ROLE)
     const token = jwt.sign(
       {
         id: user._id,

@@ -2,7 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 require("dotenv").config();
 
-const authRoutes = require("./routes/authRoutes"); // optional bonus
+const authRoutes = require("./routes/authRoutes"); 
 const bookRoutes = require("./routes/bookRoutes");
 
 const app = express();
@@ -13,9 +13,9 @@ app.use(express.json());
 // MongoDB Connection
 mongoose
   .connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB Connected Successfully ✅"))
+  .then(() => console.log("MongoDB Connected Successfully "))
   .catch((err) => {
-    console.error("MongoDB Connection Error ❌", err);
+    console.error("MongoDB Connection Error ", err);
     process.exit(1);
   });
 
@@ -31,7 +31,7 @@ app.use("/", authRoutes);
 
 // // Default Route
 // app.get("/", (req, res) => {
-//   res.send("📚 Book Library API Running...");
+//   res.send("Book Library API Running...");
 // });
 
 //frontend
@@ -45,5 +45,5 @@ app.use((req, res) => {
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(` Server running on port ${PORT}`);
 });
